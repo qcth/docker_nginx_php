@@ -1,0 +1,27 @@
+version: '1'
+
+services:
+    web:
+        image: qcth/centos-nginx:1.16
+        ports:
+            - "80:80"
+        volumes:
+            - ./www:/www
+            - ./nginx.conf:/etc/nginx/conf.d/default.conf
+            - "phpsocket:/var/run/php"
+        networks:
+            - www-network
+    php:
+        image: qcth/centos-php:fpm-7.2.20
+        volumes:
+            - ./www:/www
+            - "phpsocket:/var/run/php"
+        networks:
+            - www-network
+
+networks:
+    www-network:
+        driver: bridge
+
+volumes:
+    phpsocket:
